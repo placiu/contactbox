@@ -1,0 +1,29 @@
+{% extends "base.html.twig" %}
+
+{% block title %}ContactBundle:Person:modify{% endblock %}
+
+{% block body %}
+<h1>Welcome to the Person:modify page</h1>
+
+    {% if personForm is defined %}
+        {{ form_start(personForm) }}
+        <h3>{{ form_label(personForm, 'Basic info') }}</h3>
+        {{ form_widget(personForm) }}
+        {{ form_end(personForm) }}
+    {% endif %}
+    <br>
+    {% if addressForm is defined %}
+        {{ form_start(addressForm) }}
+        <h3>{{ form_label(addressForm, 'Address') }}</h3>
+        {{ form_widget(addressForm) }}
+        {{ form_end(addressForm) }}
+    {% endif %}
+    <br>
+    {% if phoneForm is defined %}
+        {{ form_start(phoneForm) }}
+        <h3>{{ form_label(phoneForm, 'Phones') }}</h3>
+        {{ form_widget(phoneForm) }}
+        {{ form_end(phoneForm) }}
+    {% endif %}
+
+{% endblock %}
