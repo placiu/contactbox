@@ -5,15 +5,15 @@ namespace ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Phone
+ * EmailAddress
  *
- * @ORM\Table(name="phone")
- * @ORM\Entity(repositoryClass="ContactBundle\Repository\PhoneRepository")
+ * @ORM\Table(name="email_address")
+ * @ORM\Entity(repositoryClass="ContactBundle\Repository\EmailAddressRepository")
  */
-class Phone
+class EmailAddress
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="phones")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="email_addresses")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     private $person;
@@ -28,16 +28,16 @@ class Phone
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="number", type="integer", unique=true)
+     * @ORM\Column(name="email_address", type="string", length=255)
      */
-    private $number;
+    private $emailAddress;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=100)
+     * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
 
@@ -53,27 +53,27 @@ class Phone
     }
 
     /**
-     * Set number
+     * Set emailAddress
      *
-     * @param integer $number
+     * @param string $emailAddress
      *
-     * @return Phone
+     * @return EmailAddress
      */
-    public function setNumber($number)
+    public function setEmailAddress($emailAddress)
     {
-        $this->number = $number;
+        $this->emailAddress = $emailAddress;
 
         return $this;
     }
 
     /**
-     * Get number
+     * Get emailAddress
      *
-     * @return int
+     * @return string
      */
-    public function getNumber()
+    public function getEmailAddress()
     {
-        return $this->number;
+        return $this->emailAddress;
     }
 
     /**
@@ -81,7 +81,7 @@ class Phone
      *
      * @param string $type
      *
-     * @return Phone
+     * @return EmailAddress
      */
     public function setType($type)
     {

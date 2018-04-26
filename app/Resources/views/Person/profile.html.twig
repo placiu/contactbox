@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+<h1>{{ person.firstname }} {{ person.lastname }}</h1>
+    <img src="images/{{ asset(person.imagePath) }}" />
+    <p>{{ person.description }}</p>
+    <h3>Address</h3>
+    {% if person.addresses is not empty %}
+        {% for address in person.addresses %}
+            <p>
+                {{ address.city }}<br>
+                {{ address.street }} {{ address.number }}/{{ address.flat }}
+            </p>
+        {% endfor %}
+    {% endif %}
+    <h3>Phones</h3>
+    {% if person.phones is not empty %}
+        {% for phone in person.phones %}
+            <p>
+                {{ phone.number }}<br>
+                {{ phone.type }}
+            </p>
+        {% endfor %}
+    {% endif %}
+    <h3>Emails</h3>
+    {% if person.mails is not empty %}
+        {% for mail in person.mails %}
+            <p>
+                {{ mail.name }}<br>
+                {{ mail.type }}
+            </p>
+        {% endfor %}
+    {% endif %}
+    <p>
+        [<a href="{{ path('modify', {'id': person.id}) }}">edit</a> |
+        <a href="{{ path('delete', {'id': person.id}) }}">del</a>]
+    </p>
+{% endblock %}

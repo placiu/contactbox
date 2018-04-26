@@ -5,15 +5,15 @@ namespace ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Phone
+ * Email
  *
- * @ORM\Table(name="phone")
- * @ORM\Entity(repositoryClass="ContactBundle\Repository\PhoneRepository")
+ * @ORM\Table(name="email")
+ * @ORM\Entity(repositoryClass="ContactBundle\Repository\EmailRepository")
  */
-class Phone
+class Email
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="phones")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="emails")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     private $person;
@@ -28,16 +28,16 @@ class Phone
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="number", type="integer")
+     * @ORM\Column(name="email", type="string", length=255)
      */
-    private $number;
+    private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=100)
+     * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
 
@@ -53,27 +53,27 @@ class Phone
     }
 
     /**
-     * Set number
+     * Set email
      *
-     * @param integer $number
+     * @param string $email
      *
-     * @return Phone
+     * @return Email
      */
-    public function setNumber($number)
+    public function setEmail($email)
     {
-        $this->number = $number;
+        $this->email = $email;
 
         return $this;
     }
 
     /**
-     * Get number
+     * Get email
      *
-     * @return int
+     * @return string
      */
-    public function getNumber()
+    public function getEmail()
     {
-        return $this->number;
+        return $this->email;
     }
 
     /**
@@ -81,7 +81,7 @@ class Phone
      *
      * @param string $type
      *
-     * @return Phone
+     * @return Email
      */
     public function setType($type)
     {
@@ -105,7 +105,7 @@ class Phone
      *
      * @param \ContactBundle\Entity\Person $person
      *
-     * @return Phone
+     * @return Email
      */
     public function setPerson(\ContactBundle\Entity\Person $person = null)
     {

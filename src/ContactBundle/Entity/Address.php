@@ -13,9 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Address
 {
     /**
-     * @ORM\OneToMany(targetEntity="Person", mappedBy="address")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="addresses")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
-    private $people;
+    private $person;
 
     /**
      * @var int
@@ -159,45 +160,29 @@ class Address
     {
         return $this->flat;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->people = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+
 
     /**
-     * Add person
+     * Set person
      *
      * @param \ContactBundle\Entity\Person $person
      *
      * @return Address
      */
-    public function addPerson(\ContactBundle\Entity\Person $person)
+    public function setPerson(\ContactBundle\Entity\Person $person = null)
     {
-        $this->people[] = $person;
+        $this->person = $person;
 
         return $this;
     }
 
     /**
-     * Remove person
+     * Get person
      *
-     * @param \ContactBundle\Entity\Person $person
+     * @return \ContactBundle\Entity\Person
      */
-    public function removePerson(\ContactBundle\Entity\Person $person)
+    public function getPerson()
     {
-        $this->people->removeElement($person);
-    }
-
-    /**
-     * Get people
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPeople()
-    {
-        return $this->people;
+        return $this->person;
     }
 }

@@ -5,15 +5,15 @@ namespace ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Phone
+ * Mail
  *
- * @ORM\Table(name="phone")
- * @ORM\Entity(repositoryClass="ContactBundle\Repository\PhoneRepository")
+ * @ORM\Table(name="mail")
+ * @ORM\Entity(repositoryClass="ContactBundle\Repository\MailRepository")
  */
-class Phone
+class Mail
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="phones")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="mails")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     private $person;
@@ -28,16 +28,16 @@ class Phone
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="number", type="integer", unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      */
-    private $number;
+    private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=100)
+     * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
 
@@ -53,27 +53,27 @@ class Phone
     }
 
     /**
-     * Set number
+     * Set name
      *
-     * @param integer $number
+     * @param string $name
      *
-     * @return Phone
+     * @return Mail
      */
-    public function setNumber($number)
+    public function setName($name)
     {
-        $this->number = $number;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get number
+     * Get name
      *
-     * @return int
+     * @return string
      */
-    public function getNumber()
+    public function getName()
     {
-        return $this->number;
+        return $this->name;
     }
 
     /**
@@ -81,7 +81,7 @@ class Phone
      *
      * @param string $type
      *
-     * @return Phone
+     * @return Mail
      */
     public function setType($type)
     {

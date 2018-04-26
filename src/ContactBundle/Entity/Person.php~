@@ -14,15 +14,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Person
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Address", inversedBy="people")
-     * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="Address", mappedBy="person")
      */
-    private $address;
+    private $addresses;
 
     /**
      * @ORM\OneToMany(targetEntity="Phone", mappedBy="person")
      */
     private $phones;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Mail", mappedBy="person")
+     */
+    private $mails;
 
     /**
      * @var int
@@ -51,7 +55,7 @@ class Person
      * @var string
      *
      * @ORM\Column(name="image_path", type="string", length=255, nullable=true)
-     * @Assert\File(mimeTypes={ "application/pdf" })
+     * @Assert\File(mimeTypes={ "image/png" })
      */
     private $imagePath;
 
@@ -160,6 +164,15 @@ class Person
     }
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->addresses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get description
      *
      * @return string
@@ -170,34 +183,37 @@ class Person
     }
 
     /**
-     * Set address
+     * Add address
      *
      * @param \ContactBundle\Entity\Address $address
      *
      * @return Person
      */
-    public function setAddress(\ContactBundle\Entity\Address $address = null)
+    public function addAddress(\ContactBundle\Entity\Address $address)
     {
-        $this->address = $address;
+        $this->addresses[] = $address;
 
         return $this;
     }
 
     /**
-     * Get address
+     * Remove address
      *
-     * @return \ContactBundle\Entity\Address
+     * @param \ContactBundle\Entity\Address $address
      */
-    public function getAddress()
+    public function removeAddress(\ContactBundle\Entity\Address $address)
     {
-        return $this->address;
+        $this->addresses->removeElement($address);
     }
+
     /**
-     * Constructor
+     * Get addresses
+     *
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function __construct()
+    public function getAddresses()
     {
-        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->addresses;
     }
 
     /**
@@ -233,4 +249,5 @@ class Person
     {
         return $this->phones;
     }
+
 }

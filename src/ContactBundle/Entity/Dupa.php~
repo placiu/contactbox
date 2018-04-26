@@ -5,15 +5,15 @@ namespace ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Phone
+ * Dupa
  *
- * @ORM\Table(name="phone")
- * @ORM\Entity(repositoryClass="ContactBundle\Repository\PhoneRepository")
+ * @ORM\Table(name="dupa")
+ * @ORM\Entity(repositoryClass="ContactBundle\Repository\DupaRepository")
  */
-class Phone
+class Dupa
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="phones")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="dupy")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     private $person;
@@ -28,16 +28,16 @@ class Phone
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="number", type="integer", unique=true)
+     * @ORM\Column(name="dupa", type="string", length=255)
      */
-    private $number;
+    private $dupa;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=100)
+     * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
 
@@ -53,27 +53,27 @@ class Phone
     }
 
     /**
-     * Set number
+     * Set dupa
      *
-     * @param integer $number
+     * @param string $dupa
      *
-     * @return Phone
+     * @return Dupa
      */
-    public function setNumber($number)
+    public function setDupa($dupa)
     {
-        $this->number = $number;
+        $this->dupa = $dupa;
 
         return $this;
     }
 
     /**
-     * Get number
+     * Get dupa
      *
-     * @return int
+     * @return string
      */
-    public function getNumber()
+    public function getDupa()
     {
-        return $this->number;
+        return $this->dupa;
     }
 
     /**
@@ -81,7 +81,7 @@ class Phone
      *
      * @param string $type
      *
-     * @return Phone
+     * @return Dupa
      */
     public function setType($type)
     {
