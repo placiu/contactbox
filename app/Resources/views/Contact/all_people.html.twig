@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block fos_user_content %}
+    <h1>Contacts</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width: 90%" scope="col">Name</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for person in people %}
+                <tr>
+                    <td><a href="{{ path('profile', {'id': person.id}) }}">{{ person.lastname }} {{ person.firstname }}</a></td>
+                    <td><a href="{{ path('modify', {'id': person.id}) }}">Edit</a></td>
+                    <td><a href="{{ path('delete', {'id': person.id}) }}">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Modify contact{% endblock %}
+
+{% block fos_user_content %}
+    <div class="jumbotron mt-5">
+    <h1 class="display-4">Modify Contact</h1>
+    <hr class="my-4">
+    {% if form is defined %}
+        {{ form_start(form) }}
+            {{ form_row(form.firstname, {'attr': {'class': 'mt-3 form-control'}, 'label': false}) }}
+            <small id="emailHelp" class="form-text text-muted">First Name</small>
+
+            {{ form_row(form.lastname, {'attr': {'class': 'mt-3 form-control'}, 'label': false}) }}
+            <small id="emailHelp" class="form-text text-muted">Last Name</small>
+
+            {{ form_row(form.description, {'attr': {'class': 'mt-3 form-control'}, 'label': false}) }}
+            <small id="emailHelp" class="form-text text-muted">Description</small>
+
+            {{ form_row(form.image_path, {'attr': {'class': 'mt-3 form-control-file'}, 'label': false}) }}
+            <small id="emailHelp" class="form-text text-muted">Upload new avatar</small>
+
+            <h5 class="mt-3">Addresses</h5>
+            {{ form_row(form.addresses, {'attr': {'class': 'mt-3 form-control'}, 'label': false}) }}
+            <small><a href="{{ path('addressAdd', {'id': id}) }}">Add</a> |
+            <a href="{{ path('addressDelete', {'id': id}) }}">Delete</a></small>
+
+            <h5 class="mt-3">Phone Numbers</h5>
+            {{ form_row(form.phones, {'attr': {'class': 'mt-3 form-control'}, 'label': false}) }}
+            <small><a href="{{ path('phoneAdd', {'id': id}) }}">Add</a> |
+            <a href="{{ path('phoneDelete', {'id': id}) }}">Delete</a></small>
+
+            <h5 class="mt-3">Emails</h5>
+            {{ form_row(form.mails, {'attr': {'class': 'mt-3 form-control'}, 'label': false}) }}
+            <small><a href="{{ path('mailAdd', {'id': id}) }}">Add</a> |
+            <a href="{{ path('mailDelete', {'id': id}) }}">Delete</a></small>
+
+            {{ form_row(form.save, {'attr': {'class': 'mt-5 btn btn-outline-primary'}}) }}
+        {{ form_end(form) }}
+    {% endif %}
+    </div>
+{% endblock %}

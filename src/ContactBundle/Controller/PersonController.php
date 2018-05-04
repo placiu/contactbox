@@ -17,7 +17,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ *  @Security("has_role('ROLE_USER')")
+ */
 class PersonController extends Controller
 {
     /**
@@ -25,11 +29,10 @@ class PersonController extends Controller
      */
     public function allPeopleAction()
     {
-        $peopleRepository = $this->getDoctrine()->getRepository(Person::class);
-        $people = $peopleRepository->findAll();
-        return $this->render('Person/all_people.html.twig', array(
+        $people = $this->getDoctrine()->getRepository(Person::class)->findBy(['owner' => $this->getUser()->getId()], ['lastname' => 'ASC']);
+        return $this->render('Contact/all_people.html.twig', [
             'people' => $people
-        ));
+        ]);
     }
 
     /**
@@ -43,6 +46,7 @@ class PersonController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $person = $form->getData();
+            $person->setOwner($this->getUser());
             /** @var UploadedFile $file */
             $file = $person->getImagePath();
             if ($file) {
@@ -55,21 +59,20 @@ class PersonController extends Controller
             $em->flush();
             return $this->redirectToRoute('profile', ['id' => $person->getId()]);
         }
-        return $this->render('/Person/new_person.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('Contact/new_person.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**
-     * @Route("/{id}", name="profile")
+     * @Route("/{id}/profile", name="profile")
      */
     public function profileAction($id)
     {
-        $peopleRepository = $this->getDoctrine()->getRepository(Person::class);
-        $person = $peopleRepository->find($id);
-        return $this->render('/Person/profile.html.twig', array(
+        $person = $this->getDoctrine()->getRepository(Person::class)->findOneBy(['id' => $id, 'owner' => $this->getUser()->getId()]);
+        return $this->render('Contact/profile.html.twig', [
             'person' => $person
-        ));
+        ]);
     }
 
     /**
@@ -77,9 +80,10 @@ class PersonController extends Controller
      */
     public function modifyAction(Request $request, $id)
     {
-        $person = $this->getDoctrine()->getRepository(Person::class)->find($id);
+        $person = $this->getDoctrine()->getRepository(Person::class)->findOneBy(['id' => $id, 'owner' => $this->getUser()->getId()]);
 
         if ($person) {
+
             $personForm = $this->createForm(addPersonForm::class, $person);
             $personForm->handleRequest($request);
 
@@ -88,17 +92,24 @@ class PersonController extends Controller
                 /** @var UploadedFile $file */
                 $file = $person->getImagePath();
                 if ($file) {
-                    $fileName = $person->getFirstName() . $person->getLastName(). '_' . rand(1,1000) . '.' . $file->guessExtension();
-                    $file->move('images/',$fileName);
+                    $fileName = $person->getFirstName() . $person->getLastName() . '_' . rand(1,
+                            1000) . '.' . $file->guessExtension();
+                    $file->move('images/', $fileName);
                     $person->setImagePath($fileName);
                 }
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($person);
                 $em->flush();
+
+                return $this->redirectToRoute('profile', ['id' => $id]);
             }
 
-            return $this->redirectToRoute('profile', ['id' => $id]);
+            return $this->render('Contact/modify.html.twig', [
+                'form' => $personForm->createView(),
+                'id' => $id
+            ]);
         }
+
         return $this->redirectToRoute('all');
     }
 
@@ -107,10 +118,11 @@ class PersonController extends Controller
      */
     public function deleteAction($id)
     {
+        $person = $this->getDoctrine()->getRepository(Person::class)->findOneBy(['id' => $id, 'owner' => $this->getUser()->getId()]);
         $em = $this->getDoctrine()->getManager();
-        $person = $this->getDoctrine()->getRepository(Person::class)->find($id);
         $em->remove($person);
         $em->flush();
+
         return $this->redirectToRoute('all');
     }
 
@@ -119,7 +131,7 @@ class PersonController extends Controller
      */
     public function addressAddAction(Request $request, $id)
     {
-        $person = $this->getDoctrine()->getRepository(Person::class)->find($id);
+        $person = $this->getDoctrine()->getRepository(Person::class)->findOneBy(['id' => $id, 'owner' => $this->getUser()->getId()]);
         $addressForm = $this->createForm(addAddressForm::class, new Address());
         $addressForm->handleRequest($request);
 
@@ -129,12 +141,13 @@ class PersonController extends Controller
             $em->persist($address);
             $em->persist($address->setPerson($person));
             $em->flush();
+
             return $this->redirectToRoute('modify', ['id' => $id]);
         }
 
-        return $this->render('Person/new_address.html.twig', array(
+        return $this->render('Contact/new_address.html.twig', [
             'form' => $addressForm->createView()
-        ));
+        ]);
     }
 
     /**
@@ -142,7 +155,7 @@ class PersonController extends Controller
      */
     public function addressDeleteAction(Request $request, $id)
     {
-        $person = $this->getDoctrine()->getRepository(Person::class)->find($id);
+        $person = $this->getDoctrine()->getRepository(Person::class)->findOneBy(['id' => $id, 'owner' => $this->getUser()->getId()]);
         $addressForm = $this->createForm(deleteAddressForm::class, $person->getAddresses());
         $addressForm->handleRequest($request);
 
@@ -151,11 +164,13 @@ class PersonController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($address);
             $em->flush();
+
+            return $this->redirectToRoute('modify', ['id' => $id]);
         }
 
-        return $this->render('Person/delete_address.html.twig', array(
+        return $this->render('Contact/delete_address.html.twig', [
             'form' => $addressForm->createView()
-        ));
+        ]);
     }
 
     /**
@@ -163,7 +178,7 @@ class PersonController extends Controller
      */
     public function phoneAddAction(Request $request, $id)
     {
-        $person = $this->getDoctrine()->getRepository(Person::class)->find($id);
+        $person = $this->getDoctrine()->getRepository(Person::class)->findOneBy(['id' => $id, 'owner' => $this->getUser()->getId()]);
         $phoneForm = $this->createForm(addPhoneForm::class, new Phone());
         $phoneForm->handleRequest($request);
 
@@ -173,12 +188,13 @@ class PersonController extends Controller
             $em->persist($phone);
             $em->persist($phone->setPerson($person));
             $em->flush();
+
             return $this->redirectToRoute('modify', ['id' => $id]);
         }
 
-        return $this->render('Person/new_phone.html.twig', array(
+        return $this->render('Contact/new_phone.html.twig', [
             'form' => $phoneForm->createView()
-        ));
+        ]);
     }
 
     /**
@@ -186,7 +202,7 @@ class PersonController extends Controller
      */
     public function phoneDeleteAction(Request $request, $id)
     {
-        $person = $this->getDoctrine()->getRepository(Person::class)->find($id);
+        $person = $this->getDoctrine()->getRepository(Person::class)->findOneBy(['id' => $id, 'owner' => $this->getUser()->getId()]);
         $phoneForm = $this->createForm(deletePhoneForm::class, $person->getPhones());
         $phoneForm->handleRequest($request);
 
@@ -195,11 +211,13 @@ class PersonController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($phone);
             $em->flush();
+
+            return $this->redirectToRoute('modify', ['id' => $id]);
         }
 
-        return $this->render('Person/delete_phone.html.twig', array(
+        return $this->render('Contact/delete_phone.html.twig', [
             'form' => $phoneForm->createView()
-        ));
+        ]);
     }
 
     /**
@@ -207,7 +225,7 @@ class PersonController extends Controller
      */
     public function mailAddAction(Request $request, $id)
     {
-        $person = $this->getDoctrine()->getRepository(Person::class)->find($id);
+        $person = $this->getDoctrine()->getRepository(Person::class)->findOneBy(['id' => $id, 'owner' => $this->getUser()->getId()]);
         $mailForm = $this->createForm(addMailForm::class, new Mail());
         $mailForm->handleRequest($request);
 
@@ -217,12 +235,13 @@ class PersonController extends Controller
             $em->persist($mail);
             $em->persist($mail->setPerson($person));
             $em->flush();
+
             return $this->redirectToRoute('modify', ['id' => $id]);
         }
 
-        return $this->render('Person/new_mail.html.twig', array(
+        return $this->render('Contact/new_mail.html.twig', [
             'form' => $mailForm->createView()
-        ));
+        ]);
     }
 
     /**
@@ -230,7 +249,7 @@ class PersonController extends Controller
      */
     public function mailDeleteAction(Request $request, $id)
     {
-        $person = $this->getDoctrine()->getRepository(Person::class)->find($id);
+        $person = $this->getDoctrine()->getRepository(Person::class)->findOneBy(['id' => $id, 'owner' => $this->getUser()->getId()]);
         $mailForm = $this->createForm(deleteMailForm::class, $person->getMails());
         $mailForm->handleRequest($request);
 
@@ -239,11 +258,13 @@ class PersonController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($mail);
             $em->flush();
+
+            return $this->redirectToRoute('modify', ['id' => $id]);
         }
 
-        return $this->render('Person/delete_mail.html.twig', array(
+        return $this->render('Contact/delete_mail.html.twig', [
             'form' => $mailForm->createView()
-        ));
+        ]);
     }
 
 }

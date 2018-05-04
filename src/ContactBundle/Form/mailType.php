@@ -14,8 +14,8 @@ class mailType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
-            ->add('type', TextType::class)
+            ->add('name', TextType::class, ['attr' => ['class' => 'mb-2 form-control'], 'label' => false])
+            ->add('type', TextType::class, ['attr' => ['class' => 'form-control'], 'label' => false])
         ;
     }
 

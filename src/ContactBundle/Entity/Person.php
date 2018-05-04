@@ -6,13 +6,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Person
+ * Contact
  *
  * @ORM\Table(name="person")
  * @ORM\Entity(repositoryClass="ContactBundle\Repository\PersonRepository")
  */
 class Person
 {
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
+     */
+    private $owner;
+
     /**
      * @ORM\OneToMany(targetEntity="Address", mappedBy="person")
      */
@@ -284,5 +290,29 @@ class Person
     public function getMails()
     {
         return $this->mails;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param \ContactBundle\Entity\User $owner
+     *
+     * @return Person
+     */
+    public function setOwner(\ContactBundle\Entity\User $owner = null)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \ContactBundle\Entity\User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 }

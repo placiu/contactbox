@@ -14,6 +14,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Person
 {
     /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
+     */
+    private $owner;
+
+    /**
      * @ORM\OneToMany(targetEntity="Address", mappedBy="person")
      */
     private $addresses;
@@ -170,6 +176,7 @@ class Person
     {
         $this->addresses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->mails = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -250,4 +257,38 @@ class Person
         return $this->phones;
     }
 
+
+    /**
+     * Add mail
+     *
+     * @param \ContactBundle\Entity\Mail $mail
+     *
+     * @return Person
+     */
+    public function addMail(\ContactBundle\Entity\Mail $mail)
+    {
+        $this->mails[] = $mail;
+
+        return $this;
+    }
+
+    /**
+     * Remove mail
+     *
+     * @param \ContactBundle\Entity\Mail $mail
+     */
+    public function removeMail(\ContactBundle\Entity\Mail $mail)
+    {
+        $this->mails->removeElement($mail);
+    }
+
+    /**
+     * Get mails
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMails()
+    {
+        return $this->mails;
+    }
 }

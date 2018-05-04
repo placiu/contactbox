@@ -15,10 +15,10 @@ class addressType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('city', TextType::class)
-            ->add('street', TextType::class)
-            ->add('number', IntegerType::class)
-            ->add('flat', IntegerType::class)
+            ->add('city', TextType::class, ['attr' => ['class' => 'mb-2 form-control'], 'label' => false])
+            ->add('street', TextType::class, ['attr' => ['class' => 'mb-2 form-control'], 'label' => false])
+            ->add('number', IntegerType::class, ['attr' => ['class' => 'mb-2 form-control'], 'label' => false])
+            ->add('flat', IntegerType::class, ['attr' => ['class' => 'form-control'], 'label' => false])
         ;
     }
 
