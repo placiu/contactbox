@@ -5,7 +5,7 @@
 {% block fos_user_content %}
 
     <h2>{{ person.firstname }} {{ person.lastname }}</h2>
-    <img src="images/{{ asset(person.imagePath) }}" />
+    <img src="/images{{ asset(person.imagePath) }}" />
     <p>{{ person.description }}</p>
     <h4>Address</h4>
     {% if person.addresses is not empty %}

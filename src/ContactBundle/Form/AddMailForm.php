@@ -2,19 +2,19 @@
 
 namespace ContactBundle\Form;
 
-use ContactBundle\Entity\Phone;
+use ContactBundle\Entity\Mail;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class addPhoneForm extends AbstractType
+class AddMailForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('number', TextType::class)
+            ->add('name', TextType::class)
             ->add('type', TextType::class)
             ->add('save', SubmitType::class)
         ;
@@ -23,7 +23,7 @@ class addPhoneForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Phone::class,
+            'data_class' => Mail::class,
         ));
     }
 }

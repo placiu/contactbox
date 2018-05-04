@@ -4,6 +4,7 @@ namespace ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Contact
@@ -72,7 +73,6 @@ class Person
      */
     private $description;
 
-
     /**
      * Get id
      *
@@ -140,6 +140,13 @@ class Person
      */
     public function setImagePath($imagePath)
     {
+        if($imagePath !== null) {
+            /** @var UploadedFile $imagePath */
+            $fileName = $this->getFirstName() . $this->getLastName() . '_' . rand(1, 1000) . '.' . $imagePath->guessExtension();
+            $imagePath->move('images', $fileName);
+            $this->imagePath = $fileName;
+            return $this;
+        }
         $this->imagePath = $imagePath;
 
         return $this;

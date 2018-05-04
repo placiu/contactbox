@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
-class mailType extends AbstractType
+class MailType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

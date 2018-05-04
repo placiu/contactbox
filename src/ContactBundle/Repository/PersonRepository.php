@@ -10,8 +10,4 @@ namespace ContactBundle\Repository;
  */
 class PersonRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findAll()
-    {
-        return $this->findBy(array(), array('lastname' => 'ASC'));
-    }
 }

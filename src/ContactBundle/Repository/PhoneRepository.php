@@ -10,10 +10,4 @@ namespace ContactBundle\Repository;
  */
 class PhoneRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function personPhoneNumbers()
-    {
-        $em = $this->getEntityManager();
-        $phones = $em->createQuery('SELECT p FROM ContactBundle:Phone p');
-        return $phones;
-    }
 }

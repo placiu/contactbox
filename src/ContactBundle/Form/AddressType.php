@@ -5,22 +5,20 @@ namespace ContactBundle\Form;
 use ContactBundle\Entity\Address;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
-class addAddressForm extends AbstractType
+class AddressType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('city', TextType::class)
-            ->add('street', TextType::class)
-            ->add('number', IntegerType::class)
-            ->add('flat', IntegerType::class)
-            ->add('save', SubmitType::class)
+            ->add('city', TextType::class, ['attr' => ['class' => 'mb-2 form-control'], 'label' => false])
+            ->add('street', TextType::class, ['attr' => ['class' => 'mb-2 form-control'], 'label' => false])
+            ->add('number', IntegerType::class, ['attr' => ['class' => 'mb-2 form-control'], 'label' => false])
+            ->add('flat', IntegerType::class, ['attr' => ['class' => 'form-control'], 'label' => false])
         ;
     }
 
