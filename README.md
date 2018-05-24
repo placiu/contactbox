@@ -1,4 +1,4 @@
-.checkout
-=========
+<h2>Contact Box</h2>
 
-A Symfony project created on April 8, 2018, 11:40 am.
+Celem warsztatów było napisanie prostej skrzynki kontaktowej. 
+Projekt napisany w <u>Symfony 3.4</u>
